@@ -1,0 +1,511 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Island Haven | Hotel Operations</title>
+  <style>
+    :root {
+      --navy: #173b3a;
+      --green: #2d6b5f;
+      --cream: #f7f6f0;
+      --muted: #727c78;
+      --border: #e3e7e1;
+      --white: #ffffff;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: var(--cream);
+      color: #253532;
+    }
+
+    .layout {
+      display: flex;
+      min-height: 100vh;
+    }
+
+    aside {
+      width: 235px;
+      background: var(--navy);
+      color: white;
+      padding: 28px 20px;
+      flex-shrink: 0;
+    }
+
+    .brand {
+      font-size: 19px;
+      font-weight: 700;
+      line-height: 1.4;
+      margin-bottom: 8px;
+    }
+
+    .brand small {
+      display: block;
+      font-size: 10px;
+      letter-spacing: 2px;
+      color: #b6d1c7;
+      margin-top: 5px;
+    }
+
+    .nav-label {
+      margin: 42px 0 12px;
+      color: #b6d1c7;
+      font-size: 10px;
+      letter-spacing: 1.5px;
+    }
+
+    .nav-item {
+      padding: 12px;
+      border-radius: 8px;
+      margin-bottom: 6px;
+      color: #d9e7e1;
+      font-size: 14px;
+    }
+
+    .nav-item.active {
+      background: #315c53;
+      color: white;
+    }
+
+    main {
+      flex: 1;
+      min-width: 0;
+      padding: 32px;
+    }
+
+    .topbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 16px;
+      margin-bottom: 30px;
+    }
+
+    .eyebrow {
+      color: var(--green);
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 1.8px;
+    }
+
+    h1 {
+      margin: 8px 0;
+      font-size: clamp(25px, 3vw, 34px);
+      color: var(--navy);
+    }
+
+    .subtext {
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.6;
+    }
+
+    .demo-tag {
+      background: #fff0d5;
+      color: #815a18;
+      padding: 9px 12px;
+      border-radius: 20px;
+      font-size: 11px;
+      font-weight: 700;
+      white-space: nowrap;
+    }
+
+    .notice {
+      background: #edf4ef;
+      border: 1px solid #d8e5da;
+      padding: 14px 16px;
+      border-radius: 10px;
+      font-size: 13px;
+      line-height: 1.6;
+      margin-bottom: 24px;
+    }
+
+    .metrics {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 16px;
+      margin-bottom: 25px;
+    }
+
+    .card {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 20px;
+      min-width: 0;
+    }
+
+    .metric-label {
+      font-size: 12px;
+      color: var(--muted);
+      margin-bottom: 14px;
+    }
+
+    .metric-value {
+      font-size: 29px;
+      font-weight: 700;
+      color: var(--navy);
+    }
+
+    .metric-foot {
+      margin-top: 10px;
+      font-size: 11px;
+      color: var(--muted);
+    }
+
+    .section-heading {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 14px;
+      margin-bottom: 15px;
+    }
+
+    h2 {
+      margin: 0;
+      font-size: 18px;
+      color: var(--navy);
+    }
+
+    .toolbar {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    button, select {
+      font: inherit;
+      font-size: 12px;
+      border: 1px solid var(--border);
+      background: white;
+      color: #29453e;
+      padding: 10px 13px;
+      border-radius: 7px;
+      cursor: pointer;
+    }
+
+    button.primary {
+      background: var(--green);
+      color: white;
+      border-color: var(--green);
+    }
+
+    .table-wrap {
+      overflow-x: auto;
+      background: white;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+    }
+
+    table {
+      border-collapse: collapse;
+      width: 100%;
+      min-width: 720px;
+      font-size: 12px;
+    }
+
+    th, td {
+      text-align: left;
+      padding: 15px 17px;
+      border-bottom: 1px solid #edf0eb;
+      white-space: nowrap;
+    }
+
+    th {
+      font-size: 10px;
+      color: var(--muted);
+      letter-spacing: 1px;
+      background: #fbfcf9;
+    }
+
+    tbody tr:last-child td { border-bottom: none; }
+
+    .status {
+      display: inline-block;
+      padding: 6px 9px;
+      border-radius: 20px;
+      font-size: 10px;
+      font-weight: 700;
+    }
+
+    .confirmed { background: #e1f2e6; color: #286b42; }
+    .cancelled { background: #fbe5e2; color: #9a4035; }
+
+    .lower-grid {
+      display: grid;
+      grid-template-columns: 1.3fr 1fr;
+      gap: 18px;
+      margin-top: 24px;
+    }
+
+    .activity {
+      display: flex;
+      gap: 12px;
+      padding: 15px 0;
+      border-bottom: 1px solid #edf0eb;
+      font-size: 12px;
+      line-height: 1.6;
+    }
+
+    .activity:last-child { border-bottom: none; }
+
+    .dot {
+      width: 9px;
+      height: 9px;
+      background: #5d9d7a;
+      border-radius: 50%;
+      margin-top: 5px;
+      flex-shrink: 0;
+    }
+
+    .activity-time {
+      display: block;
+      color: var(--muted);
+      font-size: 10px;
+      margin-top: 4px;
+    }
+
+    .opportunity-value {
+      font-size: 26px;
+      font-weight: 700;
+      color: var(--green);
+      margin: 15px 0 8px;
+    }
+
+    .opportunity-note {
+      font-size: 12px;
+      line-height: 1.7;
+      color: var(--muted);
+    }
+
+    footer {
+      color: var(--muted);
+      font-size: 10px;
+      text-align: center;
+      padding: 25px 0 5px;
+    }
+
+    @media (max-width: 1050px) {
+      .metrics { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    }
+
+    @media (max-width: 700px) {
+      .layout { display: block; }
+      aside { width: 100%; padding: 18px; }
+      .nav-label, .nav-item { display: none; }
+      main { padding: 22px 15px; }
+      .topbar { align-items: flex-start; flex-direction: column; }
+      .metrics { gap: 10px; }
+      .card { padding: 15px; }
+      .metric-value { font-size: 24px; }
+      .lower-grid { grid-template-columns: 1fr; }
+      .section-heading { align-items: flex-start; flex-direction: column; }
+    }
+  </style>
+</head>
+<body>
+  <div class="layout">
+    <aside>
+      <div class="brand">
+        ISLAND HAVEN
+        <small>HOTEL OPERATIONS</small>
+      </div>
+      <div class="nav-label">WORKSPACE</div>
+      <div class="nav-item active">▦ &nbsp; Overview</div>
+      <div class="nav-item">▤ &nbsp; Bookings</div>
+      <div class="nav-item">↻ &nbsp; Cancellations</div>
+      <div class="nav-item">✧ &nbsp; Revenue recovery</div>
+      <div class="nav-label">DEMO ENVIRONMENT</div>
+      <div style="font-size:12px;line-height:1.8;color:#d9e7e1">
+        Sample data only<br>
+        No live hotel integrations
+      </div>
+    </aside>
+
+    <main>
+      <div class="topbar">
+        <div>
+          <div class="eyebrow">OPERATIONS OVERVIEW</div>
+          <h1>Good morning, team.</h1>
+          <div class="subtext">A clearer view of bookings, room activity and revenue opportunities.</div>
+        </div>
+        <div class="demo-tag">● DEMO · SIMULATED DATA</div>
+      </div>
+
+      <div class="notice">
+        <strong>Prototype environment.</strong>
+        These records are fictional sample data. Booking and cancellation events shown here are not connected to live OTAs, a PMS or WhatsApp.
+      </div>
+
+      <section class="metrics">
+        <div class="card">
+          <div class="metric-label">Total bookings shown</div>
+          <div class="metric-value" id="total">4</div>
+          <div class="metric-foot">Sample booking records</div>
+        </div>
+        <div class="card">
+          <div class="metric-label">Confirmed bookings</div>
+          <div class="metric-value" id="confirmedTotal">3</div>
+          <div class="metric-foot">Current sample status</div>
+        </div>
+        <div class="card">
+          <div class="metric-label">Cancelled bookings</div>
+          <div class="metric-value" id="cancelledTotal">1</div>
+          <div class="metric-foot">History retained</div>
+        </div>
+        <div class="card">
+          <div class="metric-label">Confirmed booking value</div>
+          <div class="metric-value" id="revenue">$840</div>
+          <div class="metric-foot">Illustrative sample value</div>
+        </div>
+      </section>
+
+      <section>
+        <div class="section-heading">
+          <div>
+            <h2>Recent bookings</h2>
+            <div class="subtext" style="margin-top:6px">Review booking status in one place.</div>
+          </div>
+          <div class="toolbar">
+            <select id="filter" aria-label="Filter bookings">
+              <option value="ALL">All bookings</option>
+              <option value="CONFIRMED">Confirmed</option>
+              <option value="CANCELLED">Cancelled</option>
+            </select>
+            <button class="primary" id="simulate">+ Simulate booking</button>
+          </div>
+        </div>
+
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>BOOKING ID</th>
+                <th>GUEST</th>
+                <th>ROOM</th>
+                <th>CHECK-IN</th>
+                <th>CHECK-OUT</th>
+                <th>VALUE</th>
+                <th>STATUS</th>
+                <th>ACTION</th>
+              </tr>
+            </thead>
+            <tbody id="bookingRows"></tbody>
+          </table>
+        </div>
+      </section>
+
+      <section class="lower-grid">
+        <div class="card">
+          <h2>Recent activity</h2>
+          <div class="activity">
+            <span class="dot"></span>
+            <div>
+              <strong>Availability check demonstrated</strong>
+              <div>A conflicting room request was rejected in the workflow test.</div>
+              <span class="activity-time">Demo workflow test · Not a live hotel event</span>
+            </div>
+          </div>
+          <div class="activity">
+            <span class="dot"></span>
+            <div>
+              <strong>Cancellation handling demonstrated</strong>
+              <div>An existing booking status was updated without deleting its record.</div>
+              <span class="activity-time">Demo workflow test · Not a live hotel event</span>
+            </div>
+          </div>
+          <div class="activity">
+            <span class="dot"></span>
+            <div>
+              <strong>Dashboard preview created</strong>
+              <div>This page currently displays local sample data.</div>
+              <span class="activity-time">No live data connection</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="eyebrow">REVENUE RECOVERY</div>
+          <h2 style="margin-top:10px">Quiet dates are opportunities.</h2>
+          <div class="opportunity-value">1 sample offer</div>
+          <div class="opportunity-note">
+            A future version can identify available rooms and suggest offers to past guests who have appropriate marketing consent.
+            <br><br>
+            No guest messages are sent by this prototype.
+          </div>
+        </div>
+      </section>
+
+      <footer>
+        ISLAND HAVEN HOTEL · CONCEPT DEMO · FICTIONAL DATA · NOT A LIVE RESERVATION SYSTEM
+      </footer>
+    </main>
+  </div>
+
+  <script>
+    const bookings = [
+      { id: "BK-101", guest: "Elena Rossi", room: "RM101", checkIn: "2026-10-20", checkOut: "2026-10-23", value: 255, status: "CONFIRMED" },
+      { id: "BK-102", guest: "Daniel Mensah", room: "RM106", checkIn: "2026-10-21", checkOut: "2026-10-24", value: 330, status: "CONFIRMED" },
+      { id: "BK103", guest: "Sofia Martins", room: "RM012", checkIn: "2026-10-22", checkOut: "2026-10-25", value: 255, status: "CANCELLED" },
+      { id: "BK-TEST-001", guest: "Alex Morgan", room: "RM101", checkIn: "2026-10-25", checkOut: "2026-10-28", value: 255, status: "CONFIRMED" }
+    ];
+
+    function render() {
+      const filter = document.getElementById("filter").value;
+      const shown = bookings.filter(b => filter === "ALL" || b.status === filter);
+      document.getElementById("bookingRows").innerHTML = shown.map(b => `
+        <tr>
+          <td><strong>${b.id}</strong></td>
+          <td>${b.guest}</td>
+          <td>${b.room}</td>
+          <td>${b.checkIn}</td>
+          <td>${b.checkOut}</td>
+          <td>$${b.value.toLocaleString("en-US")}</td>
+          <td><span class="status ${b.status === "CONFIRMED" ? "confirmed" : "cancelled"}">${b.status}</span></td>
+          <td>${b.status === "CONFIRMED" ? `<button data-cancel="${b.id}">Simulate cancellation</button>` : "—"}</td>
+        </tr>
+      `).join("");
+
+      document.getElementById("total").textContent = bookings.length;
+      document.getElementById("confirmedTotal").textContent = bookings.filter(b => b.status === "CONFIRMED").length;
+      document.getElementById("cancelledTotal").textContent = bookings.filter(b => b.status === "CANCELLED").length;
+      const confirmedValue = bookings.filter(b => b.status === "CONFIRMED").reduce((sum, b) => sum + b.value, 0);
+      document.getElementById("revenue").textContent = "$" + confirmedValue.toLocaleString("en-US");
+    }
+
+    document.getElementById("filter").addEventListener("change", render);
+
+    document.getElementById("simulate").addEventListener("click", () => {
+      const next = bookings.length + 1;
+      bookings.push({
+        id: "DEMO-" + String(next).padStart(3, "0"),
+        guest: "Sample Guest " + next,
+        room: "RM201",
+        checkIn: "2026-10-29",
+        checkOut: "2026-10-31",
+        value: 198,
+        status: "CONFIRMED"
+      });
+      render();
+      alert("Simulated booking added to this page only. Nothing was sent to Airtable or a hotel system.");
+    });
+
+    document.getElementById("bookingRows").addEventListener("click", event => {
+      const id = event.target.dataset.cancel;
+      if (!id) return;
+      const booking = bookings.find(b => b.id === id);
+      if (booking && confirm("Simulate cancellation for " + id + "? This changes only this page's sample data.")) {
+        booking.status = "CANCELLED";
+        render();
+        alert("Simulated cancellation completed on this page only. Airtable has not been changed.");
+      }
+    });
+
+    render();
+  </script>
+</body>
+</html>
