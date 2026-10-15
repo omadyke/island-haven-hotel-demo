@@ -3,509 +3,905 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#102b2a">
   <title>Island Haven | Hotel Operations</title>
+
   <style>
     :root {
-      --navy: #173b3a;
-      --green: #2d6b5f;
-      --cream: #f7f6f0;
-      --muted: #727c78;
-      --border: #e3e7e1;
-      --white: #ffffff;
+      --navy: #102b2a;
+      --navy-light: #1b3c3a;
+      --teal: #2b7770;
+      --teal-light: #e4f2ef;
+      --background: #f5f7f6;
+      --surface: #ffffff;
+      --text: #233431;
+      --muted: #788581;
+      --border: #e5eae7;
+      --green: #26754c;
+      --green-bg: #e8f5ec;
+      --red: #a84242;
+      --red-bg: #fbecec;
+      --amber: #93661a;
+      --amber-bg: #fbf2dc;
+      --shadow: 0 3px 14px rgba(22, 50, 44, .045);
     }
 
     * { box-sizing: border-box; }
 
     body {
       margin: 0;
-      font-family: Arial, sans-serif;
-      background: var(--cream);
-      color: #253532;
-    }
-
-    .layout {
-      display: flex;
-      min-height: 100vh;
-    }
-
-    aside {
-      width: 235px;
-      background: var(--navy);
-      color: white;
-      padding: 28px 20px;
-      flex-shrink: 0;
-    }
-
-    .brand {
-      font-size: 19px;
-      font-weight: 700;
-      line-height: 1.4;
-      margin-bottom: 8px;
-    }
-
-    .brand small {
-      display: block;
-      font-size: 10px;
-      letter-spacing: 2px;
-      color: #b6d1c7;
-      margin-top: 5px;
-    }
-
-    .nav-label {
-      margin: 42px 0 12px;
-      color: #b6d1c7;
-      font-size: 10px;
-      letter-spacing: 1.5px;
-    }
-
-    .nav-item {
-      padding: 12px;
-      border-radius: 8px;
-      margin-bottom: 6px;
-      color: #d9e7e1;
+      background: var(--background);
+      color: var(--text);
+      font-family: Inter, -apple-system, BlinkMacSystemFont,
+        "Segoe UI", sans-serif;
       font-size: 14px;
     }
 
+    button, input, select { font: inherit; }
+
+    button {
+      cursor: pointer;
+    }
+
+    .app {
+      min-height: 100vh;
+      display: grid;
+      grid-template-columns: 238px minmax(0, 1fr);
+    }
+
+    .sidebar {
+      background: var(--navy);
+      color: #fff;
+      padding: 28px 18px;
+      display: flex;
+      flex-direction: column;
+      gap: 36px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 0 8px;
+    }
+
+    .brand-mark {
+      width: 39px;
+      height: 39px;
+      border-radius: 12px;
+      background: #d6b77b;
+      color: var(--navy);
+      display: grid;
+      place-items: center;
+      font-family: Georgia, serif;
+      font-size: 22px;
+      font-weight: bold;
+    }
+
+    .brand-name {
+      font-family: Georgia, serif;
+      font-size: 17px;
+      letter-spacing: .3px;
+    }
+
+    .brand-subtitle {
+      color: #a9c1b9;
+      font-size: 10px;
+      margin-top: 4px;
+      letter-spacing: 1.8px;
+      text-transform: uppercase;
+    }
+
+    .nav-label {
+      color: #90aaa2;
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 1.5px;
+      padding: 0 12px;
+      margin-bottom: 12px;
+    }
+
+    .nav-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      color: #c7d7d1;
+      padding: 12px;
+      border-radius: 8px;
+      margin-bottom: 5px;
+    }
+
     .nav-item.active {
-      background: #315c53;
-      color: white;
+      background: var(--navy-light);
+      color: #fff;
+      border-left: 3px solid #d6b77b;
+      padding-left: 9px;
+    }
+
+    .nav-icon {
+      width: 19px;
+      text-align: center;
+      font-size: 16px;
+    }
+
+    .sidebar-note {
+      margin-top: auto;
+      border: 1px solid #36524b;
+      border-radius: 10px;
+      padding: 15px;
+      color: #d3e0da;
+      font-size: 12px;
+      line-height: 1.6;
+    }
+
+    .sidebar-note strong {
+      display: block;
+      color: #e3c990;
+      margin-bottom: 5px;
     }
 
     main {
-      flex: 1;
       min-width: 0;
-      padding: 32px;
+      padding: 30px 34px 24px;
     }
 
     .topbar {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      gap: 16px;
-      margin-bottom: 30px;
+      gap: 18px;
+      margin-bottom: 28px;
     }
 
     .eyebrow {
-      color: var(--green);
-      font-size: 11px;
-      font-weight: 700;
-      letter-spacing: 1.8px;
+      color: var(--teal);
+      text-transform: uppercase;
+      font-size: 10px;
+      letter-spacing: 1.7px;
+      font-weight: 800;
+      margin-bottom: 8px;
     }
+
+    h1, h2, p { margin-top: 0; }
 
     h1 {
-      margin: 8px 0;
-      font-size: clamp(25px, 3vw, 34px);
-      color: var(--navy);
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: clamp(26px, 3vw, 34px);
+      font-weight: 500;
+      margin-bottom: 8px;
+      letter-spacing: -.6px;
     }
 
-    .subtext {
+    .subtitle {
       color: var(--muted);
-      font-size: 14px;
-      line-height: 1.6;
+      margin-bottom: 0;
+      line-height: 1.5;
     }
 
-    .demo-tag {
-      background: #fff0d5;
-      color: #815a18;
-      padding: 9px 12px;
-      border-radius: 20px;
-      font-size: 11px;
-      font-weight: 700;
+    .top-actions {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .connection {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      color: var(--muted);
+      font-size: 12px;
       white-space: nowrap;
     }
 
+    .dot {
+      width: 8px;
+      height: 8px;
+      background: #b7a16c;
+      border-radius: 50%;
+      display: inline-block;
+    }
+
+    .dot.online { background: #359866; }
+    .dot.offline { background: #c14c4c; }
+
+    .button {
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 10px 14px;
+      background: #fff;
+      color: var(--text);
+      font-weight: 650;
+      transition: background .15s;
+    }
+
+    .button:hover { background: #f0f5f2; }
+    .button:disabled { opacity: .6; cursor: wait; }
+
+    .button-primary {
+      color: #fff;
+      background: var(--navy);
+      border-color: var(--navy);
+    }
+
+    .button-primary:hover { background: #234743; }
+
     .notice {
-      background: #edf4ef;
-      border: 1px solid #d8e5da;
-      padding: 14px 16px;
+      background: #fff9e9;
+      border: 1px solid #eadbb4;
       border-radius: 10px;
-      font-size: 13px;
+      padding: 13px 16px;
+      color: #705a2b;
+      font-size: 12px;
       line-height: 1.6;
-      margin-bottom: 24px;
+      margin-bottom: 22px;
+    }
+
+    .notice strong { color: #59451d; }
+
+    .notice.error {
+      background: var(--red-bg);
+      border-color: #efcccc;
+      color: var(--red);
+    }
+
+    .notice.success {
+      background: var(--green-bg);
+      border-color: #cde8d5;
+      color: var(--green);
     }
 
     .metrics {
       display: grid;
       grid-template-columns: repeat(4, minmax(0, 1fr));
       gap: 16px;
-      margin-bottom: 25px;
+      margin-bottom: 24px;
     }
 
-    .card {
-      background: var(--white);
+    .metric {
+      background: var(--surface);
       border: 1px solid var(--border);
       border-radius: 12px;
       padding: 20px;
+      box-shadow: var(--shadow);
       min-width: 0;
     }
 
-    .metric-label {
-      font-size: 12px;
-      color: var(--muted);
-      margin-bottom: 14px;
-    }
-
-    .metric-value {
-      font-size: 29px;
-      font-weight: 700;
-      color: var(--navy);
-    }
-
-    .metric-foot {
-      margin-top: 10px;
-      font-size: 11px;
-      color: var(--muted);
-    }
-
-    .section-heading {
+    .metric-top {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      gap: 14px;
-      margin-bottom: 15px;
+      gap: 8px;
+      margin-bottom: 19px;
     }
 
-    h2 {
-      margin: 0;
-      font-size: 18px;
-      color: var(--navy);
-    }
-
-    .toolbar {
-      display: flex;
-      gap: 10px;
-      flex-wrap: wrap;
-    }
-
-    button, select {
-      font: inherit;
+    .metric-label {
+      color: var(--muted);
       font-size: 12px;
-      border: 1px solid var(--border);
-      background: white;
-      color: #29453e;
-      padding: 10px 13px;
-      border-radius: 7px;
-      cursor: pointer;
     }
 
-    button.primary {
-      background: var(--green);
-      color: white;
-      border-color: var(--green);
+    .metric-icon {
+      width: 33px;
+      height: 33px;
+      display: grid;
+      place-items: center;
+      border-radius: 9px;
+      background: var(--teal-light);
+      color: var(--teal);
+      font-size: 17px;
+    }
+
+    .metric-value {
+      font-family: Georgia, serif;
+      font-size: clamp(25px, 3vw, 34px);
+      letter-spacing: -.7px;
+      overflow-wrap: anywhere;
+    }
+
+    .metric-caption {
+      margin-top: 7px;
+      color: var(--muted);
+      font-size: 11px;
+    }
+
+    .content-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1.7fr) minmax(260px, .8fr);
+      gap: 20px;
+      align-items: start;
+    }
+
+    .panel {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      box-shadow: var(--shadow);
+      min-width: 0;
+    }
+
+    .panel-header {
+      padding: 21px 22px;
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 15px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .panel-header h2 {
+      font-size: 15px;
+      margin-bottom: 6px;
+    }
+
+    .panel-description {
+      color: var(--muted);
+      font-size: 11px;
+      line-height: 1.5;
+      margin-bottom: 0;
+    }
+
+    .panel-body { padding: 20px 22px; }
+
+    .table-tools {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+    }
+
+    select {
+      border: 1px solid var(--border);
+      background: #fff;
+      color: var(--text);
+      border-radius: 7px;
+      padding: 9px 10px;
+      max-width: 150px;
     }
 
     .table-wrap {
+      width: 100%;
       overflow-x: auto;
-      background: white;
-      border: 1px solid var(--border);
-      border-radius: 12px;
     }
 
     table {
       border-collapse: collapse;
       width: 100%;
-      min-width: 720px;
-      font-size: 12px;
-    }
-
-    th, td {
       text-align: left;
-      padding: 15px 17px;
-      border-bottom: 1px solid #edf0eb;
       white-space: nowrap;
     }
 
     th {
-      font-size: 10px;
       color: var(--muted);
-      letter-spacing: 1px;
-      background: #fbfcf9;
+      font-size: 10px;
+      font-weight: 750;
+      text-transform: uppercase;
+      letter-spacing: .8px;
+      padding: 13px 12px;
+      background: #fafcfb;
+      border-bottom: 1px solid var(--border);
     }
+
+    td {
+      padding: 15px 12px;
+      border-bottom: 1px solid #edf0ee;
+      font-size: 12px;
+    }
+
+    th:first-child, td:first-child { padding-left: 22px; }
+    th:last-child, td:last-child { padding-right: 22px; }
 
     tbody tr:last-child td { border-bottom: none; }
+    tbody tr:hover { background: #fbfdfc; }
+
+    .guest-name { font-weight: 700; }
+    .booking-id { color: var(--muted); font-size: 10px; margin-top: 4px; }
+    .secondary { color: var(--muted); }
 
     .status {
-      display: inline-block;
-      padding: 6px 9px;
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      padding: 5px 8px;
       border-radius: 20px;
       font-size: 10px;
-      font-weight: 700;
+      font-weight: 800;
     }
 
-    .confirmed { background: #e1f2e6; color: #286b42; }
-    .cancelled { background: #fbe5e2; color: #9a4035; }
+    .status.confirmed { background: var(--green-bg); color: var(--green); }
+    .status.cancelled { background: var(--red-bg); color: var(--red); }
+    .status.other { background: var(--amber-bg); color: var(--amber); }
 
-    .lower-grid {
-      display: grid;
-      grid-template-columns: 1.3fr 1fr;
-      gap: 18px;
+    .side-panel { margin-bottom: 20px; }
+
+    .summary-row {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 13px 0;
+      border-bottom: 1px solid var(--border);
+      font-size: 12px;
+    }
+
+    .summary-row:last-child { border-bottom: none; }
+    .summary-label { color: var(--muted); }
+    .summary-value { font-weight: 700; text-align: right; }
+
+    .recovery-card {
+      background: var(--navy);
+      color: #fff;
+      padding: 22px;
+      border-radius: 12px;
+    }
+
+    .recovery-card .eyebrow { color: #d9c08d; }
+
+    .recovery-card h2 {
+      font-family: Georgia, serif;
+      font-size: 23px;
+      line-height: 1.3;
+      font-weight: 500;
+      margin-bottom: 12px;
+    }
+
+    .recovery-card p {
+      color: #c1d2cb;
+      font-size: 12px;
+      line-height: 1.7;
+      margin-bottom: 0;
+    }
+
+    .empty-state {
+      padding: 35px 20px;
+      text-align: center;
+      color: var(--muted);
+      line-height: 1.6;
+      white-space: normal;
+    }
+
+    .empty-state strong {
+      display: block;
+      color: var(--text);
+      margin-bottom: 7px;
+    }
+
+    .footer {
+      display: flex;
+      justify-content: space-between;
+      gap: 15px;
+      flex-wrap: wrap;
+      color: var(--muted);
+      font-size: 10px;
+      line-height: 1.6;
       margin-top: 24px;
     }
 
-    .activity {
-      display: flex;
-      gap: 12px;
-      padding: 15px 0;
-      border-bottom: 1px solid #edf0eb;
-      font-size: 12px;
-      line-height: 1.6;
-    }
-
-    .activity:last-child { border-bottom: none; }
-
-    .dot {
-      width: 9px;
-      height: 9px;
-      background: #5d9d7a;
-      border-radius: 50%;
-      margin-top: 5px;
-      flex-shrink: 0;
-    }
-
-    .activity-time {
-      display: block;
-      color: var(--muted);
-      font-size: 10px;
-      margin-top: 4px;
-    }
-
-    .opportunity-value {
-      font-size: 26px;
-      font-weight: 700;
-      color: var(--green);
-      margin: 15px 0 8px;
-    }
-
-    .opportunity-note {
-      font-size: 12px;
-      line-height: 1.7;
-      color: var(--muted);
-    }
-
-    footer {
-      color: var(--muted);
-      font-size: 10px;
-      text-align: center;
-      padding: 25px 0 5px;
-    }
-
-    @media (max-width: 1050px) {
+    @media (max-width: 1150px) {
+      .app { grid-template-columns: 205px minmax(0, 1fr); }
+      main { padding: 25px 22px; }
       .metrics { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .content-grid { grid-template-columns: 1fr; }
+      .side-column {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 16px;
+      }
     }
 
     @media (max-width: 700px) {
-      .layout { display: block; }
-      aside { width: 100%; padding: 18px; }
-      .nav-label, .nav-item { display: none; }
+      .app { grid-template-columns: 1fr; }
+      .sidebar { padding: 16px; gap: 20px; }
+      .sidebar nav, .sidebar-note { display: none; }
       main { padding: 22px 15px; }
       .topbar { align-items: flex-start; flex-direction: column; }
+      .top-actions { width: 100%; justify-content: space-between; }
       .metrics { gap: 10px; }
-      .card { padding: 15px; }
-      .metric-value { font-size: 24px; }
-      .lower-grid { grid-template-columns: 1fr; }
-      .section-heading { align-items: flex-start; flex-direction: column; }
+      .metric { padding: 15px; }
+      .metric-top { margin-bottom: 12px; }
+      .metric-value { font-size: 26px; }
+      .panel-header, .panel-body { padding: 16px; }
+      .side-column { grid-template-columns: 1fr; }
     }
   </style>
 </head>
+
 <body>
-  <div class="layout">
-    <aside>
+  <div class="app">
+    <aside class="sidebar">
       <div class="brand">
-        ISLAND HAVEN
-        <small>HOTEL OPERATIONS</small>
+        <div class="brand-mark">I</div>
+        <div>
+          <div class="brand-name">Island Haven</div>
+          <div class="brand-subtitle">Hotel Operations</div>
+        </div>
       </div>
-      <div class="nav-label">WORKSPACE</div>
-      <div class="nav-item active">▦ &nbsp; Overview</div>
-      <div class="nav-item">▤ &nbsp; Bookings</div>
-      <div class="nav-item">↻ &nbsp; Cancellations</div>
-      <div class="nav-item">✧ &nbsp; Revenue recovery</div>
-      <div class="nav-label">DEMO ENVIRONMENT</div>
-      <div style="font-size:12px;line-height:1.8;color:#d9e7e1">
-        Sample data only<br>
-        No live hotel integrations
+
+      <nav>
+        <div class="nav-label">OPERATIONS</div>
+        <div class="nav-item active"><span class="nav-icon">▦</span> Overview</div>
+        <div class="nav-item"><span class="nav-icon">▤</span> Bookings</div>
+        <div class="nav-item"><span class="nav-icon">⌂</span> Rooms</div>
+        <div class="nav-item"><span class="nav-icon">♧</span> Guest Insights</div>
+        <div class="nav-item"><span class="nav-icon">↗</span> Revenue Recovery</div>
+      </nav>
+
+      <div class="sidebar-note">
+        <strong>Prototype workspace</strong>
+        A demonstration of how booking information can be brought into one operational view.
       </div>
     </aside>
 
     <main>
-      <div class="topbar">
+      <header class="topbar">
         <div>
-          <div class="eyebrow">OPERATIONS OVERVIEW</div>
-          <h1>Good morning, team.</h1>
-          <div class="subtext">A clearer view of bookings, room activity and revenue opportunities.</div>
+          <div class="eyebrow">Operations overview</div>
+          <h1>Good day, Hotel Team</h1>
+          <p class="subtitle">Your bookings, brought together in one view.</p>
         </div>
-        <div class="demo-tag">● DEMO · SIMULATED DATA</div>
-      </div>
 
-      <div class="notice">
+        <div class="top-actions">
+          <div class="connection">
+            <span class="dot" id="connectionDot"></span>
+            <span id="connectionText">Connecting…</span>
+          </div>
+          <button class="button button-primary" id="refreshButton" type="button">
+            ↻ Refresh data
+          </button>
+        </div>
+      </header>
+
+      <div class="notice" id="notice" role="status" aria-live="polite">
         <strong>Prototype environment.</strong>
-        These records are fictional sample data. Booking and cancellation events shown here are not connected to live OTAs, a PMS or WhatsApp.
+        Sample hotel records are used for demonstration. This dashboard does not connect directly to OTAs, a PMS, or WhatsApp.
       </div>
 
-      <section class="metrics">
-        <div class="card">
-          <div class="metric-label">Total bookings shown</div>
-          <div class="metric-value" id="total">4</div>
-          <div class="metric-foot">Sample booking records</div>
+      <section class="metrics" aria-label="Booking summary">
+        <div class="metric">
+          <div class="metric-top">
+            <span class="metric-label">Total bookings</span>
+            <span class="metric-icon">▤</span>
+          </div>
+          <div class="metric-value" id="totalBookings">—</div>
+          <div class="metric-caption">Records returned by Airtable</div>
         </div>
-        <div class="card">
-          <div class="metric-label">Confirmed bookings</div>
-          <div class="metric-value" id="confirmedTotal">3</div>
-          <div class="metric-foot">Current sample status</div>
+
+        <div class="metric">
+          <div class="metric-top">
+            <span class="metric-label">Confirmed bookings</span>
+            <span class="metric-icon">✓</span>
+          </div>
+          <div class="metric-value" id="confirmedBookings">—</div>
+          <div class="metric-caption">Currently marked confirmed</div>
         </div>
-        <div class="card">
-          <div class="metric-label">Cancelled bookings</div>
-          <div class="metric-value" id="cancelledTotal">1</div>
-          <div class="metric-foot">History retained</div>
+
+        <div class="metric">
+          <div class="metric-top">
+            <span class="metric-label">Cancelled bookings</span>
+            <span class="metric-icon">↗</span>
+          </div>
+          <div class="metric-value" id="cancelledBookings">—</div>
+          <div class="metric-caption">Currently marked cancelled</div>
         </div>
-        <div class="card">
-          <div class="metric-label">Confirmed booking value</div>
-          <div class="metric-value" id="revenue">$840</div>
-          <div class="metric-foot">Illustrative sample value</div>
+
+        <div class="metric">
+          <div class="metric-top">
+            <span class="metric-label">Confirmed booking value</span>
+            <span class="metric-icon">¤</span>
+          </div>
+          <div class="metric-value" id="confirmedValue">—</div>
+          <div class="metric-caption">Sum of confirmed booking values</div>
         </div>
       </section>
 
-      <section>
-        <div class="section-heading">
-          <div>
-            <h2>Recent bookings</h2>
-            <div class="subtext" style="margin-top:6px">Review booking status in one place.</div>
-          </div>
-          <div class="toolbar">
-            <select id="filter" aria-label="Filter bookings">
-              <option value="ALL">All bookings</option>
-              <option value="CONFIRMED">Confirmed</option>
-              <option value="CANCELLED">Cancelled</option>
-            </select>
-            <button class="primary" id="simulate">+ Simulate booking</button>
-          </div>
-        </div>
-
-        <div class="table-wrap">
-          <table>
-            <thead>
-              <tr>
-                <th>BOOKING ID</th>
-                <th>GUEST</th>
-                <th>ROOM</th>
-                <th>CHECK-IN</th>
-                <th>CHECK-OUT</th>
-                <th>VALUE</th>
-                <th>STATUS</th>
-                <th>ACTION</th>
-              </tr>
-            </thead>
-            <tbody id="bookingRows"></tbody>
-          </table>
-        </div>
-      </section>
-
-      <section class="lower-grid">
-        <div class="card">
-          <h2>Recent activity</h2>
-          <div class="activity">
-            <span class="dot"></span>
+      <div class="content-grid">
+        <section class="panel">
+          <div class="panel-header">
             <div>
-              <strong>Availability check demonstrated</strong>
-              <div>A conflicting room request was rejected in the workflow test.</div>
-              <span class="activity-time">Demo workflow test · Not a live hotel event</span>
+              <h2>Booking register</h2>
+              <p class="panel-description">Booking records retrieved from your n8n workflow.</p>
+            </div>
+
+            <div class="table-tools">
+              <select id="statusFilter" aria-label="Filter bookings by status">
+                <option value="ALL">All statuses</option>
+                <option value="CONFIRMED">Confirmed</option>
+                <option value="CANCELLED">Cancelled</option>
+                <option value="OTHER">Other statuses</option>
+              </select>
             </div>
           </div>
-          <div class="activity">
-            <span class="dot"></span>
-            <div>
-              <strong>Cancellation handling demonstrated</strong>
-              <div>An existing booking status was updated without deleting its record.</div>
-              <span class="activity-time">Demo workflow test · Not a live hotel event</span>
-            </div>
-          </div>
-          <div class="activity">
-            <span class="dot"></span>
-            <div>
-              <strong>Dashboard preview created</strong>
-              <div>This page currently displays local sample data.</div>
-              <span class="activity-time">No live data connection</span>
-            </div>
-          </div>
-        </div>
 
-        <div class="card">
-          <div class="eyebrow">REVENUE RECOVERY</div>
-          <h2 style="margin-top:10px">Quiet dates are opportunities.</h2>
-          <div class="opportunity-value">1 sample offer</div>
-          <div class="opportunity-note">
-            A future version can identify available rooms and suggest offers to past guests who have appropriate marketing consent.
-            <br><br>
-            No guest messages are sent by this prototype.
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>Guest / Booking</th>
+                  <th>Room</th>
+                  <th>Stay</th>
+                  <th>Value</th>
+                  <th>Status</th>
+                  <th>Source</th>
+                </tr>
+              </thead>
+              <tbody id="bookingTable">
+                <tr>
+                  <td colspan="6">
+                    <div class="empty-state">
+                      <strong>Loading bookings…</strong>
+                      Requesting records from n8n.
+                    </div>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
           </div>
-        </div>
-      </section>
+        </section>
 
-      <footer>
-        ISLAND HAVEN HOTEL · CONCEPT DEMO · FICTIONAL DATA · NOT A LIVE RESERVATION SYSTEM
+        <div class="side-column">
+          <section class="panel side-panel">
+            <div class="panel-header">
+              <div>
+                <h2>Booking snapshot</h2>
+                <p class="panel-description">A quick view of the returned records.</p>
+              </div>
+            </div>
+            <div class="panel-body">
+              <div class="summary-row">
+                <span class="summary-label">Latest refresh</span>
+                <span class="summary-value" id="lastRefresh">Not yet loaded</span>
+              </div>
+              <div class="summary-row">
+                <span class="summary-label">Data source</span>
+                <span class="summary-value">Airtable via n8n</span>
+              </div>
+              <div class="summary-row">
+                <span class="summary-label">Records received</span>
+                <span class="summary-value" id="recordCount">—</span>
+              </div>
+              <div class="summary-row">
+                <span class="summary-label">View mode</span>
+                <span class="summary-value">Read-only</span>
+              </div>
+            </div>
+          </section>
+
+          <section class="recovery-card">
+            <div class="eyebrow">Revenue recovery</div>
+            <h2>Make quiet periods an opportunity.</h2>
+            <p>
+              A future step could identify eligible past guests and available
+              rooms, then suggest relevant offers for human review. No offers
+              or messages are sent by this prototype.
+            </p>
+          </section>
+        </div>
+      </div>
+
+      <footer class="footer">
+        <span>Island Haven · Hotel Operations Prototype</span>
+        <span>Fictional demonstration data · Not a production reservation system</span>
       </footer>
     </main>
   </div>
 
   <script>
-    const bookings = [
-      { id: "BK-101", guest: "Elena Rossi", room: "RM101", checkIn: "2026-10-20", checkOut: "2026-10-23", value: 255, status: "CANCELLED" },
-      { id: "BK-102", guest: "Daniel Mensah", room: "RM106", checkIn: "2026-10-21", checkOut: "2026-10-24", value: 330, status: "CONFIRMED" },
-      { id: "BK103", guest: "Sofia Martins", room: "RM012", checkIn: "2026-10-22", checkOut: "2026-10-25", value: 255, status: "CANCELLED" },
-      { id: "BK-TEST-001", guest: "Alex Morgan", room: "RM101", checkIn: "2026-10-25", checkOut: "2026-10-28", value: 255, status: "CONFIRMED" }
-    ];
+    // Replace this placeholder with your n8n Production Webhook URL.
+    const WEBHOOK_URL = "https://communicatory-precipitously-annika.ngrok-free.dev/webhook/island-haven-bookings";
 
-    function render() {
-      const filter = document.getElementById("filter").value;
-      const shown = bookings.filter(b => filter === "ALL" || b.status === filter);
-      document.getElementById("bookingRows").innerHTML = shown.map(b => `
-        <tr>
-          <td><strong>${b.id}</strong></td>
-          <td>${b.guest}</td>
-          <td>${b.room}</td>
-          <td>${b.checkIn}</td>
-          <td>${b.checkOut}</td>
-          <td>$${b.value.toLocaleString("en-US")}</td>
-          <td><span class="status ${b.status === "CONFIRMED" ? "confirmed" : "cancelled"}">${b.status}</span></td>
-          <td>${b.status === "CONFIRMED" ? `<button data-cancel="${b.id}">Simulate cancellation</button>` : "—"}</td>
-        </tr>
-      `).join("");
+    let bookings = [];
 
-      document.getElementById("total").textContent = bookings.length;
-      document.getElementById("confirmedTotal").textContent = bookings.filter(b => b.status === "CONFIRMED").length;
-      document.getElementById("cancelledTotal").textContent = bookings.filter(b => b.status === "CANCELLED").length;
-      const confirmedValue = bookings.filter(b => b.status === "CONFIRMED").reduce((sum, b) => sum + b.value, 0);
-      document.getElementById("revenue").textContent = "$" + confirmedValue.toLocaleString("en-US");
+    const $ = (id) => document.getElementById(id);
+
+    function money(value) {
+      const amount = Number(value);
+      return new Intl.NumberFormat("en-US", {
+        style: "currency",
+        currency: "USD",
+        maximumFractionDigits: 2
+      }).format(Number.isFinite(amount) ? amount : 0);
     }
 
-    document.getElementById("filter").addEventListener("change", render);
+    function safeText(value) {
+      return String(value ?? "");
+    }
 
-    document.getElementById("simulate").addEventListener("click", () => {
-      const next = bookings.length + 1;
-      bookings.push({
-        id: "DEMO-" + String(next).padStart(3, "0"),
-        guest: "Sample Guest " + next,
-        room: "RM201",
-        checkIn: "2026-10-29",
-        checkOut: "2026-10-31",
-        value: 198,
-        status: "CONFIRMED"
+    function escapeHTML(value) {
+      return safeText(value).replace(/[&<>"']/g, (char) => ({
+        "&": "&amp;",
+        "<": "&lt;",
+        ">": "&gt;",
+        '"': "&quot;",
+        "'": "&#39;"
+      })[char]);
+    }
+
+    function displayDate(value) {
+      if (!value) return "—";
+
+      const parts = String(value).split("-");
+      if (parts.length !== 3) return escapeHTML(value);
+
+      return `${parts[2]}/${parts[1]}/${parts[0]}`;
+    }
+
+    function statusClass(status) {
+      const normalized = safeText(status).trim().toUpperCase();
+
+      if (normalized === "CONFIRMED") return "confirmed";
+      if (normalized === "CANCELLED") return "cancelled";
+      return "other";
+    }
+
+    function setConnection(connected) {
+      $("connectionDot").className =
+        "dot " + (connected ? "online" : "offline");
+
+      $("connectionText").textContent =
+        connected ? "Connected" : "Connection issue";
+    }
+
+    function showNotice(message, type = "") {
+      const notice = $("notice");
+      notice.className = "notice" + (type ? " " + type : "");
+      notice.textContent = message;
+    }
+
+    function render() {
+      const confirmed = bookings.filter(
+        booking => safeText(booking.status).toUpperCase() === "CONFIRMED"
+      );
+
+      const cancelled = bookings.filter(
+        booking => safeText(booking.status).toUpperCase() === "CANCELLED"
+      );
+
+      const confirmedValue = confirmed.reduce(
+        (sum, booking) => sum + (Number(booking.value) || 0),
+        0
+      );
+
+      $("totalBookings").textContent = bookings.length;
+      $("confirmedBookings").textContent = confirmed.length;
+      $("cancelledBookings").textContent = cancelled.length;
+      $("confirmedValue").textContent = money(confirmedValue);
+      $("recordCount").textContent = bookings.length;
+
+      renderTable();
+    }
+
+    function renderTable() {
+      const filter = $("statusFilter").value;
+
+      const filtered = bookings.filter(booking => {
+        const status = safeText(booking.status).toUpperCase();
+
+        if (filter === "ALL") return true;
+        if (filter === "OTHER") {
+          return status !== "CONFIRMED" && status !== "CANCELLED";
+        }
+
+        return status === filter;
       });
-      render();
-      alert("Simulated booking added to this page only. Nothing was sent to Airtable or a hotel system.");
-    });
 
-    document.getElementById("bookingRows").addEventListener("click", event => {
-      const id = event.target.dataset.cancel;
-      if (!id) return;
-      const booking = bookings.find(b => b.id === id);
-      if (booking && confirm("Simulate cancellation for " + id + "? This changes only this page's sample data.")) {
-        booking.status = "CANCELLED";
-        render();
-        alert("Simulated cancellation completed on this page only. Airtable has not been changed.");
+      const table = $("bookingTable");
+
+      if (filtered.length === 0) {
+        table.innerHTML = `
+          <tr>
+            <td colspan="6">
+              <div class="empty-state">
+                <strong>No matching bookings</strong>
+                Try another status filter or refresh the records.
+              </div>
+            </td>
+          </tr>`;
+        return;
       }
-    });
 
-    render();
+      table.innerHTML = filtered.map(booking => {
+        const status = safeText(booking.status).trim().toUpperCase();
+
+        return `
+          <tr>
+            <td>
+              <div class="guest-name">${escapeHTML(booking.guest || "Guest not listed")}</div>
+              <div class="booking-id">${escapeHTML(booking.id || "No booking ID")}</div>
+            </td>
+            <td>${escapeHTML(booking.room || "—")}</td>
+            <td>
+              <div>${displayDate(booking.checkIn)}</div>
+              <div class="secondary">to ${displayDate(booking.checkOut)}</div>
+            </td>
+            <td>${money(booking.value)}</td>
+            <td>
+              <span class="status ${statusClass(status)}">
+                ${escapeHTML(status || "UNKNOWN")}
+              </span>
+            </td>
+            <td>${escapeHTML(booking.source || "—")}</td>
+          </tr>`;
+      }).join("");
+    }
+
+    async function loadBookings() {
+      const button = $("refreshButton");
+
+      if (
+        !WEBHOOK_URL ||
+        WEBHOOK_URL === "PASTE_YOUR_N8N_PRODUCTION_URL_HERE"
+      ) {
+        setConnection(false);
+        showNotice(
+          "Setup required: add your n8n Production Webhook URL to index.html before loading booking records.",
+          "error"
+        );
+        return;
+      }
+
+      button.disabled = true;
+      button.textContent = "Loading…";
+      showNotice(
+        "Connecting to n8n and retrieving the latest booking records…"
+      );
+
+      try {
+        const response = await fetch(WEBHOOK_URL, {
+          method: "GET",
+          headers: { "Accept": "application/json" },
+          cache: "no-store"
+        });
+
+        if (!response.ok) {
+          throw new Error(`The webhook returned HTTP ${response.status}.`);
+        }
+
+        const data = await response.json();
+
+        if (!Array.isArray(data)) {
+          throw new Error(
+            "The webhook response was not a list of booking records."
+          );
+        }
+
+        bookings = data.map(item => ({
+          id: item.id ?? "",
+          guest: item.guest ?? "",
+          room: item.room ?? "",
+          checkIn: item.checkIn ?? "",
+          checkOut: item.checkOut ?? "",
+          value: Number(item.value ?? 0),
+          status: safeText(item.status).toUpperCase(),
+          source: item.source ?? ""
+        }));
+
+        render();
+        setConnection(true);
+
+        $("lastRefresh").textContent = new Date().toLocaleTimeString(
+          undefined,
+          { hour: "2-digit", minute: "2-digit" }
+        );
+
+        showNotice(
+          `Connection successful. ${bookings.length} booking records were retrieved from Airtable through n8n. This is a prototype using demonstration data.`,
+          "success"
+        );
+      } catch (error) {
+        console.error("Unable to load bookings:", error);
+        setConnection(false);
+
+        showNotice(
+          "Could not load bookings. Check that the n8n workflow is published, the Production URL is correct, and the webhook allows requests from this website. Details: " +
+          error.message,
+          "error"
+        );
+      } finally {
+        button.disabled = false;
+        button.textContent = "↻ Refresh data";
+      }
+    }
+
+    $("refreshButton").addEventListener("click", loadBookings);
+    $("statusFilter").addEventListener("change", renderTable);
+
+    loadBookings();
   </script>
 </body>
 </html>
